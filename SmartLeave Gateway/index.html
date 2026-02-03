@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MITS Permission System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Landing Page -->
+        <div id="landing-page" class="page active">
+            <div class="hero-section">
+                <div class="logo-container">
+                    <div class="logo-circle">
+                        🎓
+                    </div>
+                </div>
+                <h1 class="main-title">CST - Department<br>Online Permission System</h1>
+                <p class="subtitle">Efficient digital permission management for Computer Science and Technology,<br>Create account, give details of your permission and just one click to forward to HOD</p>
+                
+                <div class="login-options">
+                    <button class="role-button student-btn" onclick="showLogin('student')">
+                        🎓 Student
+                    </button>
+                    <button class="role-button hod-btn" onclick="showLogin('hod')">
+                        💼 HOD Login
+                    </button>
+                    <!-- <button class="role-button faculty-btn" onclick="showLogin('faculty')">
+                        🏫 Faculty Login
+                    </button> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Signup Page -->
+        <div id="signup-page" class="page">
+            <div class="auth-container slide-container">
+                <div class="auth-card slide-card">
+                    <h2 class="auth-title">MITS Permission System</h2>
+                    <p class="auth-subtitle" id="signupSubtitle">Create your account</p>
+                    
+                    <form id="signup-form" class="auth-form">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="fullName" placeholder="John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="email" placeholder="user@mits.ac.in" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="password" required>
+                        </div>
+                        <button type="submit" class="auth-button">Sign Up</button>
+                    </form>
+                    
+                    <p class="auth-link">Already have an account? <a href="#" onclick="showLogin('student')">Login</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Page -->
+        <div id="login-page" class="page">
+            <div class="auth-container slide-container">
+                <div class="auth-card slide-card">
+                    <h2 class="auth-title">MITS Permission System</h2>
+                    <p class="auth-subtitle" id="loginSubtitle">Welcome back</p>
+                    
+                    <form id="login-form" class="auth-form">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="auth-button" id="loginButton">Login</button>
+                    </form>
+                    
+                    <div class="auth-links" id="authLinks">
+                        <p class="auth-link">Don't have an account? <a href="#" onclick="showSignup('student')">Sign up</a></p>
+                        <p class="auth-link"><a href="#" onclick="showLanding()">← Back to Home</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Dashboard -->
+        <div id="student-dashboard" class="page">
+            <div class="dashboard-header">
+                <h1>Student Dashboard</h1>
+                <div class="user-info">
+                    <span id="studentName">Welcome, Student</span>
+                    <button onclick="logout()" class="logout-btn">Logout</button>
+                </div>
+            </div>
+            
+            <div class="dashboard-content">
+                <div class="dashboard-grid">
+                    <div class="dashboard-card qr-card">
+                        <h3>📝 Manual Entry</h3>
+                        <p>Fill permission requests manually</p>
+                        <button class="scan-button" onclick="showScannerPage()">Open Manual Entry</button>
+                    </div>
+                    
+                    <div class="dashboard-card history-card">
+                        <h3>📋 Permission History</h3>
+                        <div id="requestsList" class="requests-list">
+                            <!-- Requests will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card attendance-card">
+                        <h3>📊 Attendance Checking</h3>
+                        <div id="attendanceStatus" class="attendance-status">
+                            <!-- Attendance status will be populated here -->
+                        </div>
+                        <div class="attendance-stats">
+                            <div class="stat">
+                                <span class="stat-value" id="presentDays">0</span>
+                                <span class="stat-label">Present (P)</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value" id="absentDays">0</span>
+                                <span class="stat-label">Absent (AB)</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value" id="permissionDays">0</span>
+                                <span class="stat-label">Permission (PM)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card notifications-card">
+                        <h3>🔔 Notifications</h3>
+                        <div id="notificationsList" class="notifications-list">
+                            <!-- Notifications will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Faculty Dashboard -->
+        <div id="faculty-dashboard" class="page">
+            <div class="dashboard-header">
+                <h1>Faculty Dashboard</h1>
+                <div class="user-info">
+                    <span id="facultyName">Faculty</span>
+                    <button onclick="logout()" class="logout-btn">Logout</button>
+                </div>
+            </div>
+            
+            <div class="dashboard-content">
+                <div class="faculty-controls">
+                    <div class="faculty-selector">
+                        <label>Select Faculty:</label>
+                        <select id="facultySelect" onchange="changeFaculty()">
+                            <option value="ashok">Mr. K. Ashok - AI</option>
+                            <option value="dinesh">Dr. K. Dinesh - DSA</option>
+                            <option value="priya">Ms. S. Priya - DBMS</option>
+                            <option value="kumar">Dr. R. Kumar - OS</option>
+                        </select>
+                    </div>
+                    
+                    <div class="time-selector">
+                        <label>Period:</label>
+                        <select id="periodSelect">
+                            <option value="1">1st Period (9:00-9:50)</option>
+                            <option value="2">2nd Period (9:50-10:40)</option>
+                            <option value="3">3rd Period (11:00-11:50)</option>
+                            <option value="4">4th Period (11:50-12:40)</option>
+                            <option value="5">5th Period (1:30-2:20)</option>
+                            <option value="6">6th Period (2:20-3:10)</option>
+                            <option value="7">7th Period (3:10-4:00)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="timetable-section">
+                    <h3>Weekly Timetable</h3>
+                    <div class="timetable-grid">
+                        <div class="day-schedule">
+                            <h4>Monday</h4>
+                            <div class="periods">
+                                <div class="period">AI - 9:00</div>
+                                <div class="period">DSA - 9:50</div>
+                                <div class="period">DBMS - 11:00</div>
+                                <div class="period">OS - 11:50</div>
+                                <div class="period">Lab - 1:30</div>
+                            </div>
+                        </div>
+                        <div class="day-schedule">
+                            <h4>Tuesday</h4>
+                            <div class="periods">
+                                <div class="period">DSA - 9:00</div>
+                                <div class="period">AI - 9:50</div>
+                                <div class="period">OS - 11:00</div>
+                                <div class="period">DBMS - 11:50</div>
+                                <div class="period">Lab - 1:30</div>
+                            </div>
+                        </div>
+                        <div class="day-schedule">
+                            <h4>Wednesday</h4>
+                            <div class="periods">
+                                <div class="period">DBMS - 9:00</div>
+                                <div class="period">OS - 9:50</div>
+                                <div class="period">AI - 11:00</div>
+                                <div class="period">DSA - 11:50</div>
+                                <div class="period">Project - 1:30</div>
+                            </div>
+                        </div>
+                        <div class="day-schedule">
+                            <h4>Thursday</h4>
+                            <div class="periods">
+                                <div class="period">OS - 9:00</div>
+                                <div class="period">DBMS - 9:50</div>
+                                <div class="period">DSA - 11:00</div>
+                                <div class="period">AI - 11:50</div>
+                                <div class="period">Lab - 1:30</div>
+                            </div>
+                        </div>
+                        <div class="day-schedule">
+                            <h4>Friday</h4>
+                            <div class="periods">
+                                <div class="period">AI - 9:00</div>
+                                <div class="period">DSA - 9:50</div>
+                                <div class="period">DBMS - 11:00</div>
+                                <div class="period">OS - 11:50</div>
+                                <div class="period">Seminar - 1:30</div>
+                            </div>
+                        </div>
+                        <div class="day-schedule">
+                            <h4>Saturday</h4>
+                            <div class="periods">
+                                <div class="period">Lab - 9:00</div>
+                                <div class="period">Project - 9:50</div>
+                                <div class="period">Review - 11:00</div>
+                                <div class="period">Extra - 11:50</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="attendance-section">
+                    <div class="attendance-header">
+                        <h2>Take Attendance</h2>
+                        <div class="attendance-info">
+                            <span id="subjectInfo">AI - Artificial Intelligence</span>
+                            <span id="dateInfo">Date: <span id="currentDate"></span></span>
+                        </div>
+                    </div>
+                    
+                    <div class="attendance-controls">
+                        <button class="control-btn mark-all-present" onclick="markAll('present')">MARK ALL PRESENT</button>
+                        <button class="control-btn mark-all-absent" onclick="markAll('absent')">MARK ALL ABSENT</button>
+                        <button class="control-btn mark-all-permission" onclick="markAll('permission')">MARK ALL PERMISSION</button>
+                        <input type="text" id="searchStudent" placeholder="Search student..." onkeyup="searchStudents()">
+                    </div>
+                    
+                    <div class="attendance-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Reg No</th>
+                                    <th>Student Name</th>
+                                    <th>P</th>
+                                    <th>AB</th>
+                                    <th>PM</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsTable">
+                                <!-- Students will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="attendance-summary">
+                        <div class="summary-stats">
+                            <div class="summary-item present-summary">
+                                <span>Present: <span id="presentCount">100%</span> (<span id="presentNumber">71</span>)</span>
+                            </div>
+                            <div class="summary-item absent-summary">
+                                <span>Absent: <span id="absentCount">0%</span> (<span id="absentNumber">0</span>)</span>
+                            </div>
+                            <div class="summary-item permission-summary">
+                                <span>Permission: <span id="permissionCount">0%</span> (<span id="permissionNumber">0</span>)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="attendance-actions">
+                            <button class="back-btn" onclick="showLanding()">BACK</button>
+                            <button class="submit-btn" onclick="submitAttendance()">SUBMIT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HOD Dashboard -->
+        <div id="hod-dashboard" class="page">
+            <div class="dashboard-header">
+                <h1>HOD Dashboard</h1>
+                <div class="user-info">
+                    <span>K. Dinesh - HOD, CST</span>
+                    <button onclick="logout()" class="logout-btn">Logout</button>
+                </div>
+            </div>
+            
+            <div class="dashboard-content">
+                <div class="dashboard-grid">
+                    <div class="dashboard-card pending-card">
+                        <h3>⏳ Pending Requests</h3>
+                        <div id="hodRequestsList" class="hod-requests-list">
+                            <!-- Pending requests will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card history-card">
+                        <h3>📋 Approval History</h3>
+                        <div id="hodHistoryList" class="history-list">
+                            <!-- History will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card stats-card">
+                        <h3>📊 Statistics</h3>
+                        <div class="stats-grid">
+                            <div class="stat">
+                                <span class="stat-value" id="totalRequests">0</span>
+                                <span class="stat-label">Total Requests</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value" id="approvedRequests">0</span>
+                                <span class="stat-label">Approved</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value" id="rejectedRequests">0</span>
+                                <span class="stat-label">Rejected</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      
+      
+            <!-- Scanner & Manual Entry Page -->
+            <div id="scanner-page" class="page">
+            <!-- Manual Entry Section -->
+            <div id="manual-section" class="manual-section active">
+                <form id="permission-form" class="permission-form">
+                    <div class="form-section">
+                        <h3>Personal Information</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" id="formName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Department</label>
+                                <select id="formDept">
+                                    <option value="AI - Artificial Intelligence">AI - Artificial Intelligence</option>
+                                    <option value="CST - Computer Science & Technology" selected>CST - Computer Science & Technology</option>
+                                    <option value="CSE - Computer Science & Engineering">CSE - Computer Science & Engineering</option>
+                                    <option value="EEE - Electrical & Electronics Engineering">EEE - Electrical & Electronics Engineering</option>
+                                    <option value="ECE - Electronics & Communication Engineering">ECE - Electronics & Communication Engineering</option>
+                                    <option value="Data Science - Data Science">Data Science - Data Science</option>
+                                    <option value="AIML - Artificial Intelligence & Machine Learning">AIML - Artificial Intelligence & Machine Learning</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Section</label>
+                                <select id="formSection">
+                                    <option value="A" selected>A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Year</label>
+                                <select id="formYear">
+                                    <option value="1-1">1-1 (1st Year 1st Semester)</option>
+                                    <option value="1-2">1-2 (1st Year 2nd Semester)</option>
+                                    <option value="2-1">2-1 (2nd Year 1st Semester)</option>
+                                    <option value="2-2">2-2 (2nd Year 2nd Semester)</option>
+                                    <option value="3-1" selected>3-1 (3rd Year 1st Semester)</option>
+                                    <option value="3-2">3-2 (3rd Year 2nd Semester)</option>
+                                    <option value="4-1">4-1 (4th Year 1st Semester)</option>
+                                    <option value="4-2">4-2 (4th Year 2nd Semester)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Gender</label>
+                                <select id="formGender">
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>Permission Details</h3>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label>Reason for Permission</label>
+                                <select id="permissionReason" required>
+                                    <option value="">Select reason</option>
+                                    <option value="leaving-class">Leaving Class</option>
+                                    <option value="leaving-period">Leaving a Period</option>
+                                    <option value="leaving-college">Leaving College</option>
+                                    <option value="attending-event">Event Participation</option>
+                                    <option value="medical-leave">Medical Leave</option>
+                                    <option value="family-leave">Family Leave</option>
+                                    <option value="emergency-leave">Emergency Leave</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input type="date" id="startDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <input type="date" id="endDate" required>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Additional Details</label>
+                                <textarea id="additionalDetails" rows="4" placeholder="Any additional information..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="primary-btn">Generate Permission Letter</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        
+        <!-- Letter Display Page -->
+        <div id="letter-page" class="page">
+            <div class="page-header">
+                <h1>Permission Letter</h1>
+                <button onclick="showScannerPage()" class="back-btn">← Back to Form</button>
+            </div>
+            
+            <div class="letter-display">
+                <div class="letter-card" id="permissionLetter">
+                    <!-- Letter content will be generated here -->
+                </div>
+            </div>
+            
+            <div class="letter-actions">
+                <button onclick="downloadLetter()" class="action-btn download-btn">
+                    📥 Download PDF
+                </button>
+                <button onclick="forwardToHOD()" class="action-btn forward-btn">
+                    📤 Submit to HOD
+                </button>
+                <button onclick="showScannerPage()" class="action-btn secondary-btn">
+                    📝 Generate New Letter
+                </button>
+                <button onclick="showStudentDashboard()" class="action-btn dashboard-btn">
+                    🏠 Back to Dashboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

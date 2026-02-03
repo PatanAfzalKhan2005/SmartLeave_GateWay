@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Login - MITS</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h2 class="auth-title">MITS Permission System</h2>
+            <p class="auth-subtitle">Faculty Login</p>
+            
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="faculty@mits.ac.in" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="auth-button">Login</button>
+            </form>
+            
+            <div class="auth-links">
+                <p class="auth-link"><a href="index.html">← Back to Home</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Faculty hardcoded login
+            if (email === 'faculty@mits.ac.in' && password === 'faculty123') {
+                const facultyUser = {
+                    name: 'Mr. K. Ashok',
+                    email: email,
+                    role: 'faculty',
+                    subject: 'AI - Artificial Intelligence'
+                };
+                localStorage.setItem('currentUser', JSON.stringify(facultyUser));
+                window.location.href = 'faculty-dashboard.html';
+            } else {
+                alert('Invalid credentials');
+            }
+        });
+    </script>
+</body>
+</html>
